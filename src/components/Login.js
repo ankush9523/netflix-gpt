@@ -1,38 +1,154 @@
-import React, { useState } from 'react'
-import Header from './Header'
+import React, { useRef, useState } from "react";
+import Header from "./Header";
+import { checkValidData } from "../utils/validate";
+import { auth } from "../utils/firebase";
+import { createUserWithEmailAndPassword,signInWithEmailAndPassword,updateProfile } from "firebase/auth";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { addUser } from "../utils/userSlice";
 
 function Login() {
+ 
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const email = useRef(null);
+  const password = useRef(null);
+  const name = useRef(null);
 
   const [isSignInForm, setIsSignInForm] = useState(true);
+  const [errorMessage, setErrorMessage] = useState(null);
 
-  function toggleSignInForm(){
-
+  function toggleSignInForm() {
     setIsSignInForm(!isSignInForm);
+  }
+  function handleButtonClick() {
+    checkValidData(email.current.value, password.current.value);
+    console.log(email.current.value);
+    console.log(password.current.value);
+    const message = checkValidData(email.current.value, password.current.value);
+    setErrorMessage(message);
+
+    if (!message) {
+      //sign up logic
+      if (!isSignInForm) {
+        createUserWithEmailAndPassword(
+          auth,
+          email.current.value,
+          password.current.value
+        )
+          .then((userCredential) => {
+            const user = userCredential.user;
+
+            updateProfile(user, {
+              displayName: name.current.value , photoURL: "https://avatars.githubusercontent.com/u/109617293?s=400&v=4",
+            }).then(() => {
+               
+               const {uid,email,displayName,photoURL} = auth.currentUser;
+               console.log("upadted adta:",auth);
+       dispatch(addUser({uid:uid , email: email, displayName : displayName , photoURL : photoURL}));
+               //navigate("/browse");
+            }).catch((error) => {
+              setErrorMessage(error .message);
+            }); 
+            
+
+          //  console.log("Signedup user:", user);
+            
+          })
+          .catch((error) => {
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            setErrorMessage(errorCode + "--" + errorMessage);
+          });
+      }
+      //sign in logic
+      else {
+        signInWithEmailAndPassword(
+          auth,
+          email.current.value,
+          password.current.value
+        )
+          .then((userCredential) => {
+            const user = userCredential.user;
+            console.log("logged in user", user);
+            //navigate("/browse");
+          })
+          .catch((error) => {
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            setErrorMessage(errorCode + "--" + errorMessage);
+          });
+      }
+    }
   }
   return (
     <div>
-        <Header/>
-        <div className='absolute'>
-            <img src='https://assets.nflxext.com/ffe/siteui/vlv3/b8dd5151-d491-4e91-b1fb-a19df70df5fc/7acd48e1-92f0-4aa7-bcc6-684b3ee50946/IN-en-20240102-trifectadaily-perspective_alpha_website_small.jpg' alt='banner'/>
-        </div>
-        <form className='w-3/12 text-white p-12 bg-black absolute my-36 mx-auto right-0 left-0 bg-opacity-85 rounded-md'>
-        <h1 className='font-bold text-3xl px-2 py-4'>{isSignInForm ? "Sign In" : "Sign Up"}</h1>
-        {!isSignInForm ? (<input type='text' placeholder='Full Name' className='p-2 m-2 w-full  bg-gray-800 rounded-sm'/>) : null}
-            <input type='text' placeholder='Email Address' className='p-2 m-2 w-full bg-gray-800 rounded-sm' />
-            <input type='password' placeholder='Password' className='p-2 m-2 w-full  bg-gray-800 rounded-sm'/>
-            <button className='p-2 m-2 bg-red-700 w-full rounded-sm'>{isSignInForm ? "Sign In" : "Sign Up"}</button>
-            <div className=' flex px-2'>
-            <input type="checkbox"  className=' w-8' />
-            <p  className=' text-gray-300 text-xs'>Remember me </p>
-            </div>
-            <p className=' text-gray-300 text-xs float-right'>Need help?</p>
-            
-          
+      <Header />
+      <div className="absolute">
+        <img
+          src="https://assets.nflxext.com/ffe/siteui/vlv3/b8dd5151-d491-4e91-b1fb-a19df70df5fc/7acd48e1-92f0-4aa7-bcc6-684b3ee50946/IN-en-20240102-trifectadaily-perspective_alpha_website_small.jpg"
+          alt="banner"
+        />
+      </div>
+      <form
+        onSubmit={(e) => e.preventDefault()}
+        className="w-3/12 text-white p-12 bg-black absolute my-36 mx-auto right-0 left-0 bg-opacity-85 rounded-md"
+      >
+        <h1 className="font-bold text-3xl px-2 py-4">
+          {isSignInForm ? "Sign In" : "Sign Up"}
+        </h1>
+        {!isSignInForm ? (
+          <input
+            ref={name}
+            type="text"
+            placeholder="Full Name"
+            className="p-2 m-2 w-full  bg-gray-800 rounded-sm"
+          />
+        ) : null}
+        <input
+          ref={email}
+          type="text"
+          placeholder="Email Address"
+          className="p-2 m-2 w-full bg-gray-800 rounded-sm"
+        />
+        <input
+          ref={password}
+          type="password"
+          placeholder="Password"
+          className="p-2 m-2 w-full  bg-gray-800 rounded-sm"
+        />
 
-            <p className='py-16 px-2 text-gray-400'> {isSignInForm ? "New To Netflix?" : "Already registered?"} <span onClick={toggleSignInForm} className='text-white cursor-pointer'>{isSignInForm ? "Sign Up Now.":"Sign In Now"}</span></p>
-        </form>
+        <p className=" text-red-500  font-semibold px-2 py-2">{errorMessage}</p>
+
+        <button
+          className="p-2 m-2 bg-red-700 w-full rounded-sm"
+          onClick={handleButtonClick}
+        >
+          {isSignInForm ? "Sign In" : "Sign Up"}
+        </button>
+        <div className=" flex  justify-between">
+        <div className="flex">
+          <input type="checkbox" className=" w-8" />
+          <p className=" text-gray-300 text-xs">Remember me </p>
+          </div>
+          <p className=" text-gray-300 text-xs">Need help?</p>
+        </div>
+        
+
+        <p className="py-16 px-2 text-gray-400">
+          {" "}
+          {isSignInForm ? "New To Netflix?" : "Already registered?"}{" "}
+          <span
+            onClick={toggleSignInForm}
+            className="text-white cursor-pointer"
+          >
+            {isSignInForm ? "Sign Up Now." : "Sign In Now"}
+          </span>
+        </p>
+      </form>
     </div>
-  )
+  );
 }
 
-export default Login
+export default Login;
