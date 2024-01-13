@@ -11,11 +11,9 @@ function useMovieTrailer(trailerid) {
     const getMovieTrailer = async()=>{
         let result = await fetch ("https://api.themoviedb.org/3/movie/"+trailerid+"/videos?",options);
         let json = await result.json();
-        console.log("trailer",json.results);
 
-        const filterData = json.results.filter((video)=>video.name ==="Official Trailer");
+        const filterData = json.results.filter((video)=>video.type ==="Trailer");
         const mainTrailer = filterData.length ? filterData[0] : json.results[0]; 
-        console.log("trailermain",mainTrailer);
         dispatch(addMovieTrailers(mainTrailer));
       }
   

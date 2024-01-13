@@ -7,3 +7,4 @@
   };
 
    export const youtubeUrl = "https://www.youtube.com/embed/";
+   export const imgurl = "https://image.tmdb.org/t/p/w500/";

@@ -19,3 +19,8 @@ created main/secondary conatiner
  --developed maincontainer
   -- video title 
   -- video background
+ -->developed secondarycontainer
+   -- movielist component
+      --moviecard componet
+      Movielist hook
+      
