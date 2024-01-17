@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {signOut} from 'firebase/auth';
 //import {auth} from '../utils/firebase';
@@ -9,12 +9,20 @@ import { auth } from "../utils/firebase";
 //import { useDispatch } from "react-redux";
 import { addUser, removeUser } from "../utils/userSlice";
 import { useEffect } from "react";
-
+import { addGptSearch } from "../utils/gptSlice";
+import { languageOption } from "../utils/constant";
+import { addLanguageCode } from "../utils/configSlice";
+import openai from "../utils/openai";
 
 function Header() {
+ 
+
   const user = useSelector((store) => store.user);
+  const gptSearchKey = useSelector((store)=>store.gpt);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  
+  //console.log("getsearchgpt", gptSearchKey);
 
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
@@ -32,6 +40,14 @@ function Header() {
       }
     });
   }, []);
+
+  async function handleGptSearch(){
+    dispatch(addGptSearch(!gptSearchKey.gptSearch));
+  }
+
+  function handleLanguagechanger(e){
+    dispatch(addLanguageCode(e));
+  }
 
   function handleSignOut(){
     signOut(auth).then(() => {
@@ -54,11 +70,33 @@ function Header() {
         
         
         {user ? 
-        <><img  className=" h-6" src={user.photoURL} alt="userLogo" />
+
+        
+        <>
+        {
+          gptSearchKey.gptSearch
+          ?
+          (
+            <select className="px-3  m-4 bg-green-600 rounded-md text-white" onChange={(e)=>handleLanguagechanger(e.target.value)}>
+          {
+            languageOption.map((language)=>  <option key={language.id}  value={language.id}>{language.name}</option>)
+          }
+        
+        </select>
+          )
+          :
+          null
+        }
+        
+        <button className=" bg-purple-700 px-3 py-1 m-4 font-semibold text-white rounded-sm "  onClick={handleGptSearch}>
+         { !gptSearchKey.gptSearch ? "Search" : "Home"}
+        </button>
+        <img  className=" h-6" src={user.photoURL} alt="userLogo" />
         <h4 className="text-white font-semibold z-50">{user.displayName}</h4>
           <button className=" bg-red-600 px-3 py-1 m-4 font-semibold text-white rounded-sm " onClick={handleSignOut}>
           Sign Out
-        </button></>
+        </button>
+        </>
         : null}
       </div>
       

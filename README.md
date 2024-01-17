@@ -23,4 +23,9 @@ created main/secondary conatiner
    -- movielist component
       --moviecard componet
       Movielist hook
+created gptToggle bUtton
+    - created searchTextPage
+      -SearchMovieListPage
+   ->Created language changer button
+
       

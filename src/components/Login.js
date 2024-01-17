@@ -6,6 +6,7 @@ import { createUserWithEmailAndPassword,signInWithEmailAndPassword,updateProfile
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { addUser } from "../utils/userSlice";
+import { banner } from "../utils/constant";
 
 function Login() {
  
@@ -87,7 +88,7 @@ function Login() {
       <Header />
       <div className="absolute">
         <img
-          src="https://assets.nflxext.com/ffe/siteui/vlv3/b8dd5151-d491-4e91-b1fb-a19df70df5fc/7acd48e1-92f0-4aa7-bcc6-684b3ee50946/IN-en-20240102-trifectadaily-perspective_alpha_website_small.jpg"
+          src={banner}
           alt="banner"
         />
       </div>

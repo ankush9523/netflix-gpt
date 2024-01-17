@@ -1,6 +1,7 @@
 import React from 'react';
 import { imgurl } from '../utils/constant';
 function MovieCard({poster_path}) {
+  if(poster_path)
   return (
     <div className=' relative flex w-48 px-2' >
       {

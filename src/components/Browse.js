@@ -4,11 +4,15 @@ import useNowplayMovie from '../hooks/useNowPlayMovie';
 import MainContainer from './MainContainer';
 import SecondaryContainer from './SecondaryContainer';
 import usePopularMovie from '../hooks/usePopularMovie';
+import { useSelector } from 'react-redux';
+import GptSearchPage from './GptSearchPage';
 
 
 function Browse() {
    useNowplayMovie();
    usePopularMovie();
+
+   const gptValue = useSelector((store)=>store.gpt.gptSearch);
   return (
     <div>
     {/**
@@ -22,8 +26,17 @@ function Browse() {
           - moviecard*n
     */}
       <Header/>
-      <MainContainer/>
+      {
+       gptValue ? 
+        
+        <GptSearchPage/>
+       :
+       <>
+       <MainContainer/>
       <SecondaryContainer/>
+       </>
+      }
+     
     </div>
   )
 }
