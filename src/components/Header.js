@@ -1,18 +1,14 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {signOut} from 'firebase/auth';
-//import {auth} from '../utils/firebase';
-//import { removeUser } from "../utils/userSlice";
 import { useNavigate } from "react-router-dom";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "../utils/firebase";
-//import { useDispatch } from "react-redux";
 import { addUser, removeUser } from "../utils/userSlice";
 import { useEffect } from "react";
 import { addGptSearch } from "../utils/gptSlice";
 import { languageOption } from "../utils/constant";
 import { addLanguageCode } from "../utils/configSlice";
-import openai from "../utils/openai";
 
 function Header() {
  
@@ -22,7 +18,6 @@ function Header() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   
-  //console.log("getsearchgpt", gptSearchKey);
 
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
@@ -60,13 +55,13 @@ function Header() {
     })
   }
   return (
-    <div className="  absolute w-full  px-8 py-2 bg-gradient-to-b from-black z-50  flex justify-between">
+    <div className="  absolute w-full  px-8 py-2 bg-gradient-to-b from-black z-50  flex flex-col sm:flex-row md:flex-row justify-between">
       <img
-      className="w-44 mx-10"
+      className=" w-24  md:w-44 mx-auto sm:mx-10 md:mx-10"
         src="https://cdn.cookielaw.org/logos/dd6b162f-1a32-456a-9cfe-897231c7763c/4345ea78-053c-46d2-b11e-09adaef973dc/Netflix_Logo_PMS.png"
         alt="logo"
       />
-      <div className="flex">
+      <div className="flex  justify-between  md:pt-[0%] ">
         
         
         {user ? 
@@ -77,7 +72,7 @@ function Header() {
           gptSearchKey.gptSearch
           ?
           (
-            <select className="px-3  m-4 bg-green-600 rounded-md text-white" onChange={(e)=>handleLanguagechanger(e.target.value)}>
+            <select className="px-2 sm:px-2 md:px-3 py-1 sm:m-2 md:m-4 bg-green-600 rounded-sm text-white" onChange={(e)=>handleLanguagechanger(e.target.value)}>
           {
             languageOption.map((language)=>  <option key={language.id}  value={language.id}>{language.name}</option>)
           }
@@ -88,13 +83,13 @@ function Header() {
           null
         }
         
-        <button className=" bg-purple-700 px-3 py-1 m-4 font-semibold text-white rounded-sm "  onClick={handleGptSearch}>
+        <button className=" bg-purple-700 sm:px-2 md:px-3 px-2 sm:py-0.5 md:py-1 sm:m-2 md:m-4  font-semibold text-white rounded-sm "  onClick={handleGptSearch}>
          { !gptSearchKey.gptSearch ? "Search" : "Home"}
         </button>
-        <img  className=" h-6" src={user.photoURL} alt="userLogo" />
+        {/*<img  className=" h-6" src={user.photoURL} alt="userLogo" />*/}
         <h4 className="text-white font-semibold z-50">{user.displayName}</h4>
-          <button className=" bg-red-600 px-3 py-1 m-4 font-semibold text-white rounded-sm " onClick={handleSignOut}>
-          Sign Out
+          <button className=" bg-red-600 sm:px-2 md:px-3 px-2 sm:py-0.5 md:py-1 sm:m-2  md:m-4 md:font-semibold text-white rounded-sm " onClick={handleSignOut}>
+          SignOut
         </button>
         </>
         : null}

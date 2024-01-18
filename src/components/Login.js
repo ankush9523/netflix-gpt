@@ -25,8 +25,6 @@ function Login() {
   }
   function handleButtonClick() {
     checkValidData(email.current.value, password.current.value);
-    console.log(email.current.value);
-    console.log(password.current.value);
     const message = checkValidData(email.current.value, password.current.value);
     setErrorMessage(message);
 
@@ -46,7 +44,6 @@ function Login() {
             }).then(() => {
                
                const {uid,email,displayName,photoURL} = auth.currentUser;
-               console.log("upadted adta:",auth);
        dispatch(addUser({uid:uid , email: email, displayName : displayName , photoURL : photoURL}));
                //navigate("/browse");
             }).catch((error) => {
@@ -54,7 +51,6 @@ function Login() {
             }); 
             
 
-          //  console.log("Signedup user:", user);
             
           })
           .catch((error) => {
@@ -72,7 +68,6 @@ function Login() {
         )
           .then((userCredential) => {
             const user = userCredential.user;
-            console.log("logged in user", user);
             //navigate("/browse");
           })
           .catch((error) => {

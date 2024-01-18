@@ -6,10 +6,10 @@ function MovieLists({ title , movie}) {
   return (
 
     <div className="px-6 py-2  right-2" >
-    <h1 className=" font-bold text-2xl px-2  text-white capitalize">{title}</h1>
-      <div className="flex hover:overflow-x-scroll">
+    <h1 className=" font-bold text-2xl sm:px-2 md:px-2 mx-20 sm:mx-0 md:mx-0 text-white capitalize">{title}</h1>
+      <div className="flex overflow-x-scroll ">
         
-        <div className=" flex mt-4">
+        <div className=" flex flex-col sm:flex-row md:flex-row mt-4">
         {
             movie.map((poster)=>
             <MovieCard  key={poster.id} poster_path={poster.poster_path} />

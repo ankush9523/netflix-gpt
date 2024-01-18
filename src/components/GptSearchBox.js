@@ -2,7 +2,6 @@ import React from 'react'
 
 
 function GptSearchBox(lang) {
-  console.log("lang",lang);
   return (
     <div className='pt-[15%]'>
      

@@ -9,7 +9,7 @@ function MainContainer() {
 
   const movies = useSelector((store)=>store.movie?.nowPlayMovie);
   //const trailers = useSelector((store)=>store.movie?.movieTrailer);
-  //console.log("trailers set", trailers);
+ 
   if(!movies) {
     return
   }
