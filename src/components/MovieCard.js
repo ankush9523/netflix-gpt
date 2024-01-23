@@ -11,4 +11,20 @@ function MovieCard({poster_path}) {
   )
 }
 
-export default MovieCard
+export const CardWithEnglish =(MovieCard)=>{
+
+  return (props)=>{
+    return(
+      <div>
+        <h1 className=' absolute  p-4 text-white  bg-red-600 z-50'>Eng</h1>
+        <MovieCard {...props} />
+      </div>
+    )
+  }
+ 
+
+}
+
+export default MovieCard;
+
+

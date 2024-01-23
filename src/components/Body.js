@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import Login from "./Login";
 import Browse from "./Browse";
 import { createBrowserRouter, RouterProvider, useNavigate } from "react-router-dom";
+import Test from "./Test";
 
 function Body() {
   
@@ -17,6 +18,10 @@ function Body() {
       path: "/browse",
       element: <Browse />,
     },
+    {
+      path:"/test",
+      element:<Test/>
+    }
   ]);
   
   {/*useEffect(() => {

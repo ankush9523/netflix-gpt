@@ -29,6 +29,9 @@ created gptToggle bUtton
    ->Created language changer button
 
 making Website Responsive----
-
+ creted build
+ deployed on firebase
+  -- firebse deploy
+    https://netflixgpt-f185d.web.app
 
       
